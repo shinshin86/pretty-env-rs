@@ -55,7 +55,7 @@ fn get_chars(w: usize, c: char) -> String {
     str
 }
 
-fn main() {
+pub fn pretty_env() {
     let output = Command::new("sh")
         .arg("-c")
         .arg("env")
