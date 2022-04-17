@@ -15,7 +15,7 @@ fn get_name_value(env: &str) -> (&str, &str) {
         value = e[1];
     }
 
-    return (name, value);
+    (name, value)
 }
 
 fn get_max_size(env_list: Vec<&str>) -> (usize, usize) {
@@ -75,7 +75,7 @@ pub fn pretty_env() {
 
         let (name, value) = get_name_value(env);
 
-        if name == "" {
+        if name.is_empty() {
             break;
         }
 
@@ -87,15 +87,15 @@ pub fn pretty_env() {
             value_space_length = value_max_size - value.len();
         }
 
-        display_text = display_text + &"\n".to_string();
+        display_text += "\n";
         display_text = display_text + &get_chars(1, '|');
         display_text = display_text + &get_chars(LEFT_MARGIN, ' ');
 
         if name.len() > (name_max_size - ELLIPSES_TEXT.len()) {
-            display_text = display_text + &name[..(name_max_size - (ELLIPSES_TEXT.len() + 1))];
-            display_text = display_text + ELLIPSES_TEXT;
+            display_text += &name[..(name_max_size - (ELLIPSES_TEXT.len() + 1))];
+            display_text += ELLIPSES_TEXT;
         } else {
-            display_text = display_text + &name;
+            display_text += name;
         }
 
         if name_space_length > 0 {
@@ -106,10 +106,10 @@ pub fn pretty_env() {
         display_text = display_text + &get_chars(LEFT_MARGIN, ' ');
 
         if value.len() > (value_max_size - ELLIPSES_TEXT.len()) {
-            display_text = display_text + &value[..(value_max_size - (ELLIPSES_TEXT.len() + 1))];
-            display_text = display_text + ELLIPSES_TEXT;
+            display_text += &value[..(value_max_size - (ELLIPSES_TEXT.len() + 1))];
+            display_text += ELLIPSES_TEXT;
         } else {
-            display_text = display_text + &value;
+            display_text += value;
         }
 
         if value_space_length > 0 {
