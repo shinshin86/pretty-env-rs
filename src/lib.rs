@@ -88,8 +88,8 @@ pub fn pretty_env() {
         }
 
         display_text += "\n";
-        display_text = display_text + &get_chars(1, '|');
-        display_text = display_text + &get_chars(LEFT_MARGIN, ' ');
+        display_text += &get_chars(1, '|');
+        display_text += &get_chars(LEFT_MARGIN, ' ');
 
         if name.len() > (name_max_size - ELLIPSES_TEXT.len()) {
             display_text += &name[..(name_max_size - (ELLIPSES_TEXT.len() + 1))];
@@ -99,11 +99,11 @@ pub fn pretty_env() {
         }
 
         if name_space_length > 0 {
-            display_text = display_text + &get_chars(name_space_length - LEFT_MARGIN, ' ');
+            display_text += &get_chars(name_space_length - LEFT_MARGIN, ' ');
         }
 
-        display_text = display_text + &get_chars(1, '|');
-        display_text = display_text + &get_chars(LEFT_MARGIN, ' ');
+        display_text += &get_chars(1, '|');
+        display_text += &get_chars(LEFT_MARGIN, ' ');
 
         if value.len() > (value_max_size - ELLIPSES_TEXT.len()) {
             display_text += &value[..(value_max_size - (ELLIPSES_TEXT.len() + 1))];
@@ -113,12 +113,12 @@ pub fn pretty_env() {
         }
 
         if value_space_length > 0 {
-            display_text = display_text + &get_chars(value_space_length - LEFT_MARGIN, ' ');
+            display_text += &get_chars(value_space_length - LEFT_MARGIN, ' ');
         }
 
-        display_text = display_text + &get_chars(1, '|');
-        display_text = display_text + &'\n'.to_string();
-        display_text = display_text + &get_chars(table_length, '-');
+        display_text += &get_chars(1, '|');
+        display_text += "\n";
+        display_text += &get_chars(table_length, '-');
     }
 
     println!("{}", display_text);
