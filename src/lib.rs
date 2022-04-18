@@ -55,71 +55,91 @@ fn get_chars(w: usize, c: char) -> String {
     str
 }
 
-pub fn pretty_env() {
+fn get_env_str() -> String {
     let output = Command::new("sh")
         .arg("-c")
         .arg("env")
         .output()
         .expect("failed to execute process");
-    let env_str = String::from_utf8(output.stdout).unwrap();
-    let env_list: Vec<&str> = env_str.split('\n').collect();
 
-    let (name_max_size, value_max_size) = get_max_size(env_list.clone());
-    let table_length = name_max_size + value_max_size + MARGIN;
+    String::from_utf8(output.stdout).unwrap()
+}
 
-    let mut display_text = get_chars(table_length, '-');
+pub fn pretty_env(option: &str) {
+    let env_str = get_env_str();
 
-    for env in env_list {
-        let mut name_space_length: usize = 0;
-        let mut value_space_length: usize = 0;
+    if option == "raw" {
+        println!("{}", env_str);
+    } else if option == "csv" {
+        let env_list: Vec<&str> = env_str.split('\n').collect();
 
-        let (name, value) = get_name_value(env);
-
-        if name.is_empty() {
-            break;
+        let mut csv_text = "".to_string();
+        for env in env_list {
+            csv_text += &env.replace("=", ",").to_string();
+            csv_text += "\n";
         }
 
-        if name_max_size > name.len() {
-            name_space_length = name_max_size - name.len();
+        println!("{}", csv_text);
+    } else {
+        let env_list: Vec<&str> = env_str.split('\n').collect();
+
+        let (name_max_size, value_max_size) = get_max_size(env_list.clone());
+        let table_length = name_max_size + value_max_size + MARGIN;
+
+        let mut display_text = get_chars(table_length, '-');
+
+        for env in env_list {
+            let mut name_space_length: usize = 0;
+            let mut value_space_length: usize = 0;
+
+            let (name, value) = get_name_value(env);
+
+            if name.is_empty() {
+                break;
+            }
+
+            if name_max_size > name.len() {
+                name_space_length = name_max_size - name.len();
+            }
+
+            if value_max_size > value.len() {
+                value_space_length = value_max_size - value.len();
+            }
+
+            display_text += "\n";
+            display_text += &get_chars(1, '|');
+            display_text += &get_chars(LEFT_MARGIN, ' ');
+
+            if name.len() > (name_max_size - ELLIPSES_TEXT.len()) {
+                display_text += &name[..(name_max_size - (ELLIPSES_TEXT.len() + 1))];
+                display_text += ELLIPSES_TEXT;
+            } else {
+                display_text += name;
+            }
+
+            if name_space_length > 0 {
+                display_text += &get_chars(name_space_length - LEFT_MARGIN, ' ');
+            }
+
+            display_text += &get_chars(1, '|');
+            display_text += &get_chars(LEFT_MARGIN, ' ');
+
+            if value.len() > (value_max_size - ELLIPSES_TEXT.len()) {
+                display_text += &value[..(value_max_size - (ELLIPSES_TEXT.len() + 1))];
+                display_text += ELLIPSES_TEXT;
+            } else {
+                display_text += value;
+            }
+
+            if value_space_length > 0 {
+                display_text += &get_chars(value_space_length - LEFT_MARGIN, ' ');
+            }
+
+            display_text += &get_chars(1, '|');
+            display_text += "\n";
+            display_text += &get_chars(table_length, '-');
         }
 
-        if value_max_size > value.len() {
-            value_space_length = value_max_size - value.len();
-        }
-
-        display_text += "\n";
-        display_text += &get_chars(1, '|');
-        display_text += &get_chars(LEFT_MARGIN, ' ');
-
-        if name.len() > (name_max_size - ELLIPSES_TEXT.len()) {
-            display_text += &name[..(name_max_size - (ELLIPSES_TEXT.len() + 1))];
-            display_text += ELLIPSES_TEXT;
-        } else {
-            display_text += name;
-        }
-
-        if name_space_length > 0 {
-            display_text += &get_chars(name_space_length - LEFT_MARGIN, ' ');
-        }
-
-        display_text += &get_chars(1, '|');
-        display_text += &get_chars(LEFT_MARGIN, ' ');
-
-        if value.len() > (value_max_size - ELLIPSES_TEXT.len()) {
-            display_text += &value[..(value_max_size - (ELLIPSES_TEXT.len() + 1))];
-            display_text += ELLIPSES_TEXT;
-        } else {
-            display_text += value;
-        }
-
-        if value_space_length > 0 {
-            display_text += &get_chars(value_space_length - LEFT_MARGIN, ' ');
-        }
-
-        display_text += &get_chars(1, '|');
-        display_text += "\n";
-        display_text += &get_chars(table_length, '-');
+        println!("{}", display_text);
     }
-
-    println!("{}", display_text);
 }
