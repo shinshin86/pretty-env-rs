@@ -143,3 +143,15 @@ pub fn pretty_env(option: &str) {
         println!("{}", display_text);
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_get_name_value() {
+        let (name, value) = get_name_value("name=value");
+        assert_eq!(name, "name");
+        assert_eq!(value, "value");
+    }
+}
