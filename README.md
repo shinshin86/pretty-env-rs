@@ -1,6 +1,8 @@
 # pretty-env-rs
 ![Logo](./images/logo.png)
 
+[![Rust CI](https://github.com/shinshin86/pretty-env-rs/actions/workflows/main.yml/badge.svg)](https://github.com/shinshin86/pretty-env-rs/actions/workflows/main.yml)
+
 This is a CLI tool to display env output results in a slightly clearer view.
 
 ## Usage
