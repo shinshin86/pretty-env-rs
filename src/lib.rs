@@ -1,3 +1,4 @@
+use serde::{Deserialize, Serialize};
 use std::process::Command;
 
 // constants
@@ -5,6 +6,12 @@ const TRUNCATE_TEXT_SIZE: usize = 50;
 const MARGIN: usize = 3;
 const LEFT_MARGIN: usize = 1;
 const ELLIPSES_TEXT: &str = "...";
+
+#[derive(Serialize, Deserialize, Debug)]
+struct Env {
+    key: String,
+    value: String,
+}
 
 fn get_name_value(env: &str) -> (&str, &str) {
     let e: Vec<&str> = env.split('=').collect();
@@ -75,11 +82,25 @@ pub fn pretty_env(option: &str) {
 
         let mut csv_text = "".to_string();
         for env in env_list {
-            csv_text += &env.replace("=", ",").to_string();
+            csv_text += &env.replace('=', ",").to_string();
             csv_text += "\n";
         }
 
         println!("{}", csv_text);
+    } else if option == "json" {
+        let mut env_map_list: Vec<Env> = Vec::new();
+        let env_list: Vec<&str> = env_str.split('\n').collect();
+
+        for env in env_list {
+            let (name, value) = get_name_value(env);
+            env_map_list.push(Env {
+                key: name.to_string(),
+                value: value.to_string(),
+            });
+        }
+
+        let json_text = serde_json::to_string(&env_map_list).unwrap();
+        println!("{}", json_text);
     } else {
         let env_list: Vec<&str> = env_str.split('\n').collect();
 

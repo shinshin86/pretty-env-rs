@@ -2,16 +2,19 @@ use std::env;
 
 fn display_usage() {
     println!(
-        "Usage: pretty-env [raw | csv]
+        "Usage: pretty-env [raw | csv | json]
 
 Pretty display
 $ pretty-env
 
-Raw display
+Raw output
 $ pretty-env raw
 
-CSV display
+CSV output
 $ pretty-env csv
+
+JSON output
+$ pretty-env json
 "
     )
 }
@@ -26,7 +29,7 @@ fn main() {
         std::process::exit(0);
     }
 
-    let valid_options = ["raw", "csv"];
+    let valid_options = ["", "raw", "csv", "json"];
     if option == "help" || !valid_options.contains(&option) {
         display_usage();
         std::process::exit(0);
