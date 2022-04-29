@@ -13,7 +13,7 @@ cargo install --git https://github.com/shinshin86/pretty-env-rs.git
 pretty-env
 ```
 
-You can use the `raw` and `csv` options.
+You can use the `raw` and `csv` and `json` options.
 
 ```sh
 # raw
@@ -21,6 +21,9 @@ pretty-env raw
 
 # csv
 pretty-env csv
+
+# json
+pretty-env json
 ```
 
 ## License
